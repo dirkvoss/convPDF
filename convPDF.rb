@@ -31,6 +31,21 @@ loop do
 	    else
 	      log.error "File #{file} konnte in #{indir} nicht gefunden werden"	  
   	  end
+   
+    outfile=outdir + file	   
+    log.debug "File #{outfile} will be scanned"
+    reader = PDF::Reader.new(outfile.strip)
+    strings = Array[]
+    reader.pages.each do |page|
+      strings.push(page.text.strip)
+    end
+
+    if strings.find { |e| /Eigenverbrauch/ =~ e } 
+      log.debug "Eigenverbrauch found in #{file}"
+    else
+      log.debug "Eigenverbrauch not found in #{file}"
+    end
+
     else
       log.error "#{file} konnte nicht umgewandelt werden !"
       log.error "#{execute.chomp}"
