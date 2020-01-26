@@ -6,10 +6,9 @@ require 'evernote_uploader'
 require 'pdf-reader'
 
 map2Dir = { 
-						"Kontoübersicht vom" 	=> "Kontoauszüge", 
+						"Kontouebersicht vom" 	=> "Kontoauszuege", 
 						"ARI Fleet Germany"		=> "Leasing" 
 					}
-
 
 maindir='/home/dirk/convPDF/'
 ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
