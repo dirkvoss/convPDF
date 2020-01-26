@@ -41,22 +41,31 @@ loop do
       outfile=outdir + file	   
       log.debug "File #{outfile} will be scanned"
       reader = PDF::Reader.new(outfile.strip)
-      found=0
+
+      #hash leeren
+      found_hash = Hash.new
+      map2Dir.each do |key, value|
+        found_hash[key]=0
+      end
+
       reader.pages.each do |page|
         map2Dir.each do |key, value|
           log.debug "check #{key}"
           if page.text.match /#{key}/ 
             log.debug "#{key} found"
-            found+=1
+            found_hash[key]+=1
           end
         end
       end
-      
-      if found > 0
-        log.debug "Vertragskonto found  #{found} times in #{file}"
-      else
-        log.debug "Vertragskonto not found in #{file}"
+    
+      map2Dir.each do |key, value|
+        if found_hash[key] > 0
+          log.debug "#{key}  found  #{found_hash[key]} times in #{file}"
+        else
+          log.debug "#{key} not found in #{file}"
+        end
       end
+    
     else
       log.error "#{file} konnte nicht umgewandelt werden !"
       log.error "#{execute.chomp}"
