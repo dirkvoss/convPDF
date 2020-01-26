@@ -6,7 +6,7 @@ require 'evernote_uploader'
 require 'pdf-reader'
 
 map2Dir = { 
-						"Vertragskonto" 	=> "Kontoauszuege", 
+						"Vattenfall" 	=> "GasWasserStrom", 
 						"ARI Fleet Germany"		=> "Leasing" 
 					}
 
@@ -15,6 +15,8 @@ ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
 indir='/mnt/freenas/07_Dokumente/Scan/Inbox/Scanned/'
 outdir=' /mnt/freenas/07_Dokumente/Scan/Inbox/ScannedOCR/'
 errdir='/mnt/freenas/07_Dokumente/Scan/Inbox/ScannedError/'
+movedir='/mnt/freenas/07_Dokumente/Scan/'
+
 logdir=maindir + 'log/';
 logfile=logdir + 'convPDF.log'
 sleeptime=600
@@ -58,14 +60,22 @@ loop do
         end
       end
     
+      maxCnt=0
+      maxkey=''
       map2Dir.each do |key, value|
         if found_hash[key] > 0
           log.debug "#{key}  found  #{found_hash[key]} times in #{file}"
+          if found_hash[key] > maxCnt
+            maxCnt=found_hash[key]
+            maxkey=key
+          end
         else
           log.debug "#{key} not found in #{file}"
         end
       end
-    
+
+      log.debug "Max #{maxkey} found #{found_hash[maxkey]} times in #{file}"
+     
     else
       log.error "#{file} konnte nicht umgewandelt werden !"
       log.error "#{execute.chomp}"
