@@ -15,7 +15,8 @@ ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
 indir='/mnt/freenas/07_Dokumente/Scan/Inbox/Scanned/'
 outdir=' /mnt/freenas/07_Dokumente/Scan/Inbox/ScannedOCR/'
 errdir='/mnt/freenas/07_Dokumente/Scan/Inbox/ScannedError/'
-logfile=maindir + 'convPDF.log'
+logdir=maindir + 'log/';
+logfile=logdir + 'convPDF.log'
 sleeptime=600
 
 log = Logger.new(logfile, 'monthly')
