@@ -1,3 +1,3 @@
 #! /bin/bash
 
-/home/dirk/convPDF/convPDFdaemon.rb stop
+/mnt/freenas/02_users/dirk/convPDF/convPDFdaemon.rb stop

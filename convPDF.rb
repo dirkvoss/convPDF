@@ -10,7 +10,7 @@ map2Dir = {
 						"ARI Fleet Germany"		=> "Leasing" 
 					}
 
-maindir='/home/dirk/convPDF/'
+maindir='/mnt/freenas/02_users/dirk/convPDF/'
 ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
 indir='/mnt/freenas/07_Dokumente/Scan/Inbox/Scanned/'
 outdir=' /mnt/freenas/07_Dokumente/Scan/Inbox/ScannedOCR/'
@@ -36,7 +36,8 @@ loop do
 	      log.debug "File #{file} in #{indir} geloescht"
 	    else
 	      log.error "File #{file} konnte in #{indir} nicht gefunden werden"	  
-  	  end
+      end
+      
    
     outfile=outdir + file	   
     log.debug "File #{outfile} will be scanned"
