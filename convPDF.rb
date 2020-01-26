@@ -6,7 +6,7 @@ require 'evernote_uploader'
 require 'pdf-reader'
 
 map2Dir = { 
-						"Kontouebersicht vom" 	=> "Kontoauszuege", 
+						"Vertragskonto" 	=> "Kontoauszuege", 
 						"ARI Fleet Germany"		=> "Leasing" 
 					}
 
@@ -36,23 +36,27 @@ loop do
 	      log.debug "File #{file} in #{indir} geloescht"
 	    else
 	      log.error "File #{file} konnte in #{indir} nicht gefunden werden"	  
+      end  
+   
+      outfile=outdir + file	   
+      log.debug "File #{outfile} will be scanned"
+      reader = PDF::Reader.new(outfile.strip)
+      found=0
+      reader.pages.each do |page|
+        map2Dir.each do |key, value|
+          log.debug "check #{key}"
+          if page.text.match /#{key}/ 
+            log.debug "#{key} found"
+            found+=1
+          end
+        end
       end
       
-   
-    outfile=outdir + file	   
-    log.debug "File #{outfile} will be scanned"
-    reader = PDF::Reader.new(outfile.strip)
-    strings = Array[]
-    reader.pages.each do |page|
-      strings.push(page.text.strip)
-    end
-
-    if strings.find { |e| /Eigenverbrauch/ =~ e } 
-      log.debug "Eigenverbrauch found in #{file}"
-    else
-      log.debug " not found in #{file}"
-    end
-
+      if found > 0
+        log.debug "Vertragskonto found  #{found} times in #{file}"
+      else
+        log.debug "Vertragskonto not found in #{file}"
+      end
     else
       log.error "#{file} konnte nicht umgewandelt werden !"
       log.error "#{execute.chomp}"
