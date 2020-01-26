@@ -5,6 +5,12 @@ require 'fileutils'
 require 'evernote_uploader'
 require 'pdf-reader'
 
+map2Dir = { 
+						"Kontoübersicht vom" 	=> "Kontoauszüge", 
+						"ARI Fleet Germany"		=> "Leasing" 
+					}
+
+
 maindir='/home/dirk/convPDF/'
 ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
 indir='/mnt/freenas/07_Dokumente/Scan/Inbox/Scanned/'
@@ -43,7 +49,7 @@ loop do
     if strings.find { |e| /Eigenverbrauch/ =~ e } 
       log.debug "Eigenverbrauch found in #{file}"
     else
-      log.debug "Eigenverbrauch not found in #{file}"
+      log.debug " not found in #{file}"
     end
 
     else
