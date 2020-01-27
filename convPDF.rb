@@ -17,6 +17,7 @@ origdir='/mnt/freenas/07_Dokumente/Scan/'
 indir=origdir  + 'Inbox/Scanned/'
 outdir=origdir + 'Inbox/ScannedOCR/'
 errdir=origdir + 'Inbox/ScannedError/'
+defaultdir=origdir + 'Mix/'
 
 logdir=maindir + 'log/';
 logfile=logdir + 'convPDF.log'
@@ -75,16 +76,28 @@ loop do
         end
       end
 
-      log.debug "The searchpattern \"#{maxkey}\" with #{found_hash[maxkey]} hits was the maximum in #{file}"
-      destdir=origdir+map2Dir[maxkey]
-      log.debug "File will be moved to #{destdir}"
-      if Dir.exists?(destdir)
-        log.debug "#{destdir} exists - file will be moved"
-        FileUtils.move outfile, destdir
+      if maxCnt == 0
+        log.debug "#{file} will be moved to default dir #{defaultdir}"
+          if Dir.exists?(defaultdir)
+            log.debug "#{defaultdir} exists - file will be moved"
+            FileUtils.move outfile, defaultdir
+          else
+            log.debug "#{defaultdir} does not exist and will be created and file will be moved"
+            Dir.mkdir(defaultdir,755) 
+            FileUtils.move outfile, defaultdir
+          end
       else
-        log.debug "#{destdir} does not exist and will be created and file will be moved"
-        Dir.mkdir(destdir,755) 
-        FileUtils.move outfile, destdir
+        log.debug "The searchpattern \"#{maxkey}\" with #{found_hash[maxkey]} hits was the maximum in #{file}"
+        destdir=origdir+map2Dir[maxkey]
+        log.debug "File will be moved to #{destdir}"
+        if Dir.exists?(destdir)
+          log.debug "#{destdir} exists - file will be moved"
+          FileUtils.move outfile, destdir
+        else
+          log.debug "#{destdir} does not exist and will be created and file will be moved"
+          Dir.mkdir(destdir,755) 
+          FileUtils.move outfile, destdir
+        end
       end
 
     else
