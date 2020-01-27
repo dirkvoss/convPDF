@@ -2,21 +2,21 @@
 
 require 'logger'
 require 'fileutils'
-require 'evernote_uploader'
 require 'pdf-reader'
 
 map2Dir = { 
-						"Vattenfall" 	    => "GasWasserStrom", 
-            "Geburtsdatum"		=> "GasWasserStrom" ,
-            "gibt es bestimmt nicht" => "na"
+						"Vattenfall" 	            => "GasWasserStrom", 
+            "barclaycard"		          => "Bank" ,
+            "gibt es bestimmt nicht"  => "na"
 					}
 
 maindir='/mnt/freenas/02_users/dirk/convPDF/'
 ocrbin='/usr/bin/ocrmypdf --force-ocr -l deu '
-indir='/mnt/freenas/07_Dokumente/Scan/Inbox/Scanned/'
-outdir='/mnt/freenas/07_Dokumente/Scan/Inbox/ScannedOCR/'
-errdir='/mnt/freenas/07_Dokumente/Scan/Inbox/ScannedError/'
-movedir='/mnt/freenas/07_Dokumente/Scan/'
+origdir='/mnt/freenas/07_Dokumente/Scan/'
+
+indir=origdir  + 'Inbox/Scanned/'
+outdir=origdir + 'Inbox/ScannedOCR/'
+errdir=origdir + 'Inbox/ScannedError/'
 
 logdir=maindir + 'log/';
 logfile=logdir + 'convPDF.log'
@@ -54,7 +54,7 @@ loop do
       reader.pages.each do |page|
         map2Dir.each do |key, value|
           #log.debug "check #{key}"
-          if page.text.match /#{key}/ 
+          if page.text.match (/#{key}/i) 
             #log.debug "#{key} found"
             found_hash[key]+=1
           end
@@ -76,13 +76,13 @@ loop do
       end
 
       log.debug "The searchpattern \"#{maxkey}\" with #{found_hash[maxkey]} hits was the maximum in #{file}"
-      destdir=movedir+map2Dir[maxkey]
+      destdir=origdir+map2Dir[maxkey]
       log.debug "File will be moved to #{destdir}"
       if Dir.exists?(destdir)
-        log.debug "#{destdir} exists - file #{outfile} will be moved"
+        log.debug "#{destdir} exists - file will be moved"
         FileUtils.move outfile, destdir
       else
-        log.debug "#{destdir} does not exist and will be created"
+        log.debug "#{destdir} does not exist and will be created and file will be moved"
         Dir.mkdir(destdir,755) 
         FileUtils.move outfile, destdir
       end
