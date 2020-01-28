@@ -6,7 +6,8 @@ require 'pdf-reader'
 
 map2Dir = { 
 						"Vattenfall" 	            => "GasWasserStrom", 
-            "barclaycard"		          => "Bank" ,
+            "barclaycard"		          => "Bank",
+            "kontoauszug"             => "Bank",
             "gibt es bestimmt nicht"  => "na"
 					}
 
