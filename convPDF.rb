@@ -8,6 +8,7 @@ map2Dir = {
 						"Vattenfall" 	            => "GasWasserStrom", 
             "barclaycard"		          => "Bank",
             "kontoauszug"             => "Bank",
+            "Huk-Coburg"              => "Versicherungen",
             "gibt es bestimmt nicht"  => "na"
 					}
 
@@ -91,13 +92,18 @@ loop do
         log.debug "The searchpattern \"#{maxkey}\" with #{found_hash[maxkey]} hits was the maximum in #{file}"
         destdir=origdir+map2Dir[maxkey]
         log.debug "File will be moved to #{destdir}"
+
+        newfilename=maxkey.upcase.gsub(/[^a-zA-Z\s.]/,'').strip  + '_' + file
+        dest = destdir + '/' + newfilename
+        log.debug "File #{file} will be renamed to #{newfilename}"
+                
         if Dir.exists?(destdir)
           log.debug "#{destdir} exists - file will be moved"
-          FileUtils.move outfile, destdir
+          FileUtils.move outfile, dest
         else
           log.debug "#{destdir} does not exist and will be created and file will be moved"
           Dir.mkdir(destdir,755) 
-          FileUtils.move outfile, destdir
+          FileUtils.move outfile, dest
         end
       end
 
