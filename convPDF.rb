@@ -8,8 +8,7 @@ map2Dir = {
 						"Vattenfall" 	            => "GasWasserStrom", 
             "barclaycard"		          => "Bank",
             "kontoauszug"             => "Bank",
-            "Huk-Coburg"              => "Versicherungen",
-            "gibt es bestimmt nicht"  => "na"
+            "Huk-Coburg"              => "Versicherungen"
 					}
 
 maindir='/mnt/freenas/02_users/dirk/convPDF/'
